@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace LibraryApp.Storage.IIdentity
 {
+    [Serializable]
     public class GenericStore<T> : IEnumerable<T>
         where T : IIdentity
     {

@@ -1,6 +1,7 @@
 ﻿using LibraryApp.Storage.IIdentity;
 
 namespace LibraryApp;
+[Serializable]
 public class Authors : IIdentity, IEquatable<Authors>
 {
 

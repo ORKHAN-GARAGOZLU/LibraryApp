@@ -22,6 +22,6 @@ namespace LibraryApp.Category
         BookEdit,
         BookRemove,
 
-        EXİT
+        SAVEandEXIT
     }
 }

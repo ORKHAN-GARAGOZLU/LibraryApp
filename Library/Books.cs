@@ -3,6 +3,7 @@ using LibraryApp.Storage.IIdentity;
 
 namespace LibraryApp.Library
 {
+    [Serializable]
     public class Books : IIdentity
     {
         public int Id { get; private set; }

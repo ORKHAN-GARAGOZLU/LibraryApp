@@ -1,24 +1,42 @@
 ﻿using LibraryApp.Category;
 using LibraryApp.Helpers;
 using LibraryApp.Library;
+using LibraryApp.Storage;
 using LibraryApp.Storage.IIdentity;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace LibraryApp
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
             #region Unicode
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
             #endregion
-            
+
             #region Store
             GenericStore<Authors> authorStore = new GenericStore<Authors>();
             GenericStore<Books> bookStore = new GenericStore<Books>();
             #endregion
+
+            const string databaseFile = "database.dat";
+
+            using (FileStream fileStream = File.Open(databaseFile, FileMode.OpenOrCreate))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                var db = (Database)binaryFormatter.Deserialize(fileStream);
+
+                if (db != null)
+                {
+                    authorStore = db.Author;
+                    bookStore = db.Book;
+                }
+            }
 
             bool allowClear = true;
             int id;
@@ -331,8 +349,17 @@ namespace LibraryApp
 
                 #endregion
 
-                #region EXIT
-                case Menu.EXİT:
+                #region SAVEandEXIT
+                case Menu.SAVEandEXIT:
+                    Database datbas = new ();
+                    datbas.Author = authorStore;
+                    datbas.Book = bookStore;
+
+                    FileStream fileStream = File.Create(databaseFile);
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(fileStream, datbas);
+                    fileStream.Flush();
+                    fileStream.Close();
 
                     Console.ForegroundColor= ConsoleColor.Red;
                     Console.WriteLine("Çıxış üçün hər-hansı düyməni sıxın!");
